@@ -36,17 +36,13 @@ def encrypt_string(string, Pk):
 def decrypt_string(encrypted_string, pk, encoding='utf-8'):
     return("".join([chr(decrypt(integer, pk)) for integer in encrypted_string]))
 
-def generate_Pk_and_pk(p, q):
-    pk, Pk = generate_Pk_and_pk(p, q)
-    return(Pk, pk)
-
-def sign_string(string, pk):
+def sign_string(string, Pk): # Pk is kept private by authority
     h = hashlib.new('sha512_256')
     h.update(string.encode())
-    return(encrypt_string(h.hexdigest(), pk))
+    return(encrypt_string(h.hexdigest(), Pk))
 
-def verify_signature(digital_signature, string, Pk):
-    h_a = decrypt_string(digital_signature, Pk)
+def verify_signature(digital_signature, string, pk): # ok is left public by authority
+    h_a = decrypt_string(digital_signature, pk)
     h_b = hashlib.new('sha512_256')
     h_b.update(string.encode())
     if h_a == h_b.hexdigest():
